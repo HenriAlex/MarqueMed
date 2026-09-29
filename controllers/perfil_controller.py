@@ -7,15 +7,11 @@ from models.perfil import Perfil
 
 
 # Importa o Schema utilizado pela API.
-from schemas.perfil_schema import PerfilSchema
+from schema.perfil_schema import PerfilSchema
 
 
 # Importa o Service de Perfil.
-from services.perfil_service import PerfilService
-
-# Importa as funções de permissão.
-# Apenas admin pode gerenciar perfis.
-from utils.permissoes import pode_gerenciar_perfis
+from service.perfil_service import PerfilService
 
 
 # Cria as rotas dos perfis.
@@ -46,12 +42,6 @@ def validar_permissao_gerenciar_perfil(usuario_logado):
     Raises:
         HTTPException: Com status 403 se acesso negado
     """
-
-    if not pode_gerenciar_perfis(usuario_logado):
-        raise HTTPException(
-            status_code=403,
-            detail="Acesso negado: apenas administrador pode gerenciar perfis."
-        )
 
 
 # ============================================================

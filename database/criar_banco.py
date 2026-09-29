@@ -28,7 +28,7 @@ class CriarBanco:
                 nome TEXT NOT NULL,
                 cpf TEXT NOT NULL UNIQUE,
                 cep TEXT,
-                data_de_nascimento TEXT,
+                data_de_nascimento DATE,
                 sexo TEXT,
                 tipo TEXT,
                 email TEXT NOT NULL UNIQUE,

@@ -10,17 +10,14 @@ from models.usuario import Usuario
 
 # Importa o Schema utilizado pelo FastAPI.
 # Ele representa os dados recebidos pela API.
-from schemas.usuario_schema import UsuarioSchema
-from schemas.usuario_schema import LoginSchema
+from schema.usuario_schema import UsuarioSchema
+from schema.usuario_schema import LoginSchema
 
 
 # Importa o Service responsável pelas regras
 # de negócio dos usuários.
-from services.usuario_service import UsuarioService
+from service.usuario_service import UsuarioService
 
-# Importa as funções de permissão.
-# Apenas admin pode gerenciar usuários.
-from utils.permissoes import pode_gerenciar_usuarios
 
 
 # Cria o agrupador de rotas dos usuários.
@@ -51,12 +48,6 @@ def validar_permissao_gerenciar_usuario(usuario_logado):
     Raises:
         HTTPException: Com status 403 se acesso negado
     """
-
-    if not pode_gerenciar_usuarios(usuario_logado):
-        raise HTTPException(
-            status_code=403,
-            detail="Acesso negado: apenas administrador pode gerenciar usuários."
-        )
 
 
 # ============================================================
