@@ -33,7 +33,7 @@ async function carregarUsuarios(){
             const title = document.createElement('div'); title.className='profile-title'; title.textContent = u.nome || u.email;
             head.appendChild(avatar); head.appendChild(title);
 
-            const meta = document.createElement('div'); meta.className='profile-meta muted'; meta.textContent = `RA: ${u.ra} • ${u.ds_perfil || ''}`;
+            const meta = document.createElement('div'); meta.className='profile-meta muted'; meta.textContent = `ID do paciente: ${u.ra || '—'} • ${u.ds_perfil || 'Sem perfil'}`;
 
             const actions = document.createElement('div'); actions.className='profile-actions';
             const btnEdit = document.createElement('button'); btnEdit.className='btn ghost'; btnEdit.style.marginRight='8px'; btnEdit.textContent='Editar'; btnEdit.onclick = function(){ editarUsuario(u); };
@@ -101,20 +101,33 @@ function filterUsers(text){
     const countEl = document.getElementById('usersCount'); if (countEl) countEl.textContent = `${visible} usuários`;
 }
 
-// Preenche o select de perfis no formulário de cadastro de usuário
-async function popularSelectPerfis(){
+// Preenche o select de perfis no formulário de usuário.
+// `selecionado` é o perfil a marcar (edição); sem ele, pré-seleciona o primeiro.
+async function popularSelectPerfis(selecionado){
     const sel = document.getElementById('selectPerfil');
     if (!sel) return;
     try{
         const r = await fetch(`${API_BASE_USERS}/perfis/`);
-        if (!r.ok) return;
+        if (!r.ok) throw new Error('Falha ao carregar perfis');
         const perfis = await r.json(); sel.innerHTML = '<option value="">Selecione um perfil</option>';
         perfis.forEach(p => { const o = document.createElement('option'); o.value = p.id_perfil; o.textContent = p.ds_perfil; sel.appendChild(o); });
-        // Se houver perfis, pre-seleciona o primeiro para evitar envio com campo vazio
-        if (perfis && perfis.length > 0) sel.value = perfis[0].id_perfil;
-    }catch(e){}
+        if (selecionado) sel.value = String(selecionado);
+        // Sem edição: pré-seleciona o primeiro para evitar envio com campo vazio
+        else if (perfis.length > 0) sel.value = String(perfis[0].id_perfil);
+    }catch(err){
+        if (typeof showToast === 'function') showToast('Não foi possível carregar os perfis.', 'error');
+    }
 }
 
+// Abre o formulário de novo usuário, sempre em modo de cadastro (sem edição pendente).
+function novoUsuario(){
+    window.usuarioEditId = null;
+    const form = document.getElementById('formUsuario');
+    if (form) form.reset();
+    document.getElementById('tituloUsuario').textContent = 'Cadastrar Usuário';
+    showScreen('telaUsuarioCadastro');
+    popularSelectPerfis();
+}
 
 // Inicia modo de edição para usuário (pré-preenche formulário)
 function editarUsuario(u){
@@ -122,8 +135,8 @@ function editarUsuario(u){
     document.getElementById('inputNome').value = u.nome || '';
     document.getElementById('inputEmail').value = u.email || '';
     document.getElementById('inputSenha').value = u.senha || '';
-    // popula select e seleciona o perfil
-    popularSelectPerfis().then(()=>{ try{ document.getElementById('selectPerfil').value = u.id_perfil; }catch(e){} });
     window.usuarioEditId = u.id_usuario;
+    document.getElementById('tituloUsuario').textContent = 'Editar Usuário';
     showScreen('telaUsuarioCadastro');
+    popularSelectPerfis(u.id_perfil);
 }

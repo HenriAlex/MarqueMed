@@ -1,5 +1,5 @@
-# Importa o APIRouter.
-from fastapi import APIRouter
+# Importa o APIRouter e a exceção HTTP.
+from fastapi import APIRouter, HTTPException
 
 
 # Importa o Model Perfil.
@@ -25,6 +25,21 @@ router = APIRouter(
 service = PerfilService()
 
 
+# Converte erros de regra de negócio em resposta 400 com "detail",
+# formato que o front-end exibe ao usuário.
+def _erro_400(erro):
+    return HTTPException(status_code=400, detail=str(erro))
+
+
+# ============================================================
+# LISTAR PERFIS
+# ============================================================
+
+@router.get("/")
+def listar():
+    return service.listar()
+
+
 # ============================================================
 # CADASTRAR PERFIL
 # ============================================================
@@ -42,9 +57,41 @@ def cadastrar(perfil_schema: PerfilSchema):
     )
 
     # Envia o Model para o Service.
-    service.cadastrar(perfil)
+    try:
+        service.cadastrar(perfil)
+    except ValueError as erro:
+        raise _erro_400(erro)
 
     # Retorna uma mensagem de sucesso.
     return {
         "mensagem": "Perfil cadastrado com sucesso."
     }
+
+
+# ============================================================
+# ATUALIZAR PERFIL
+# ============================================================
+
+@router.put("/{id_perfil}")
+def atualizar(id_perfil: int, perfil_schema: PerfilSchema):
+    perfil = Perfil(id_perfil=id_perfil, ds_perfil=perfil_schema.ds_perfil)
+    try:
+        service.atualizar(perfil)
+    except ValueError as erro:
+        raise _erro_400(erro)
+
+    return {"mensagem": "Perfil atualizado com sucesso."}
+
+
+# ============================================================
+# EXCLUIR PERFIL
+# ============================================================
+
+@router.delete("/{id_perfil}")
+def excluir(id_perfil: int):
+    try:
+        service.excluir(id_perfil)
+    except ValueError as erro:
+        raise _erro_400(erro)
+
+    return {"mensagem": "Perfil removido com sucesso."}

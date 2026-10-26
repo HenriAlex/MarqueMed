@@ -33,15 +33,11 @@
     function enviarEmail(event) {
         event.preventDefault(); 
         
-        let email = document.getElementById("email-recuperacao").value;
+        // A API ainda não possui envio de e-mail para recuperação de senha.
+        // Não exibimos sucesso, pois nenhum e-mail foi enviado.
         let msg = document.getElementById("msg-recuperar");
-        
-        
-        msg.style.color = "green";
-        msg.innerText = "Um link de recuperação foi enviado para: " + email;
-        
-        
-        document.getElementById("email-recuperacao").value = "";
+        msg.style.color = "#b00020";
+        msg.innerText = "A recuperação de senha ainda não está disponível. Procure a recepção.";
     }
     </script>
 

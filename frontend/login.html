@@ -161,12 +161,12 @@
     <header id="cabecalho">
         <div id=topo>
         <div id="logo">
-        <a href="cumida.html"><img src="logo_marquemed.jpg"></a>
+        <a href="index.html"><span>MarqueMed</span></a>
         </div>
             <nav id="menu">
             <ul>
             <a href="cadastro.html"><li>Cadastro</li></a> 
-            <a href="cumida.html"><li>Inicio</li></a>
+            <a href="index.html"><li>Inicio</li></a>
             </ul>
             </nav>
         </div>
@@ -177,20 +177,55 @@
         <h2>Faça seu login:</h2>
 
         <form id="form-login">
-            <label>Usuário:</label>
-            <input type="text" placeholder="Digite seu Usuário" required>
-            <label>Senha</label>
-            <input type="password"placeholder="Digite sua senha"required>
+            <label for="login-email">E-mail:</label>
+            <input type="email" id="login-email" placeholder="Digite seu e-mail" required>
+            <label for="login-senha">Senha</label>
+            <input type="password" id="login-senha" placeholder="Digite sua senha" required>
             <button type="submit">Entrar</button>
         </form>
+        <p id="msg-login" style="text-align:center; margin-top:15px; font-weight:bold;"></p>
         <div id="links-login">
             <a href="recuperar.html">Esqueci minha senha</a>
             <a href="cadastro.html">Novo cadastro</a>
-            <a href="cumida.html">Voltar a pagina principal</a>
+            <a href="index.html">Voltar a pagina principal</a>
         </div>
         
     </main>
 
-    
+    <script>
+    // Endereço da API (mesmo usado pelas telas do sistema)
+    const API_BASE_LOGIN = 'http://127.0.0.1:8000';
+
+    document.getElementById('form-login').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const email = document.getElementById('login-email').value.trim();
+        const senha = document.getElementById('login-senha').value;
+        const msg = document.getElementById('msg-login');
+        msg.style.color = '#ffd2d2';
+
+        try {
+            const resposta = await fetch(`${API_BASE_LOGIN}/usuarios/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, senha })
+            });
+
+            if (!resposta.ok) {
+                let erro = { detail: 'Não foi possível entrar.' };
+                try { erro = await resposta.json(); } catch (e) {}
+                msg.textContent = erro.detail || 'Não foi possível entrar.';
+                return;
+            }
+
+            // Guarda os dados do usuário logado (sem a senha) para as telas seguintes.
+            const usuario = await resposta.json();
+            sessionStorage.setItem('marquemed-usuario', JSON.stringify(usuario));
+            location.href = 'index.html';
+        } catch (err) {
+            msg.textContent = 'Não foi possível conectar ao servidor.';
+        }
+    });
+    </script>
 </body>
 </html>

@@ -21,9 +21,9 @@ class UsuarioService:
             raise ValueError("O nome do usuário é obrigatório.")
 
 
-        # Verifica se o CPF foi informado.
-        if not usuario.cpf:
-            raise ValueError("O CPF do usuário é obrigatório.")
+        # Verifica se o ID do paciente (RA) foi informado.
+        if not usuario.ra:
+            raise ValueError("O ID do paciente é obrigatório.")
 
 
         # Verifica se o e-mail foi informado.
@@ -145,9 +145,9 @@ class UsuarioService:
             raise ValueError("O nome do usuário é obrigatório.")
 
 
-        # Verifica se o CPF foi informado.
-        if not usuario.cpf:
-            raise ValueError("O CPF do usuário é obrigatório.")
+        # Verifica se o ID do paciente (RA) foi informado.
+        if not usuario.ra:
+            raise ValueError("O ID do paciente é obrigatório.")
 
 
         # Verifica se o e-mail foi informado.

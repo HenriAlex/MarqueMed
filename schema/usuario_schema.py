@@ -7,10 +7,20 @@ from typing import Optional
 
 
 class UsuarioSchema(BaseModel):
-    cpf: str
+    # Identificador do paciente ("ID do paciente" no front-end).
+    ra: str
+    nome: str
+    email: str
+    senha: str
+    id_perfil: Optional[int] = None
+
+    # Campos opcionais: nem todas as telas os enviam.
+    cpf: Optional[str] = None
+    cep: Optional[str] = None
     sexo: Optional[str] = None
     data_de_nascimento: Optional[date] = None
-    nome: str
-    id_perfil: Optional[int] = None
+
+
+class LoginSchema(BaseModel):
     email: str
     senha: str

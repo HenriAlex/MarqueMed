@@ -238,10 +238,20 @@ function corPorTexto(texto){
     return paleta[Math.abs(hash) % paleta.length];
 }
 
+// Abre o formulário de novo perfil, sempre em modo de cadastro (sem edição pendente).
+function novoPerfil(){
+    window.perfilEditId = null;
+    const form = document.getElementById('formPerfil');
+    if (form) form.reset();
+    document.getElementById('tituloPerfil').textContent = 'Cadastrar Perfil';
+    showScreen('telaCadastro');
+}
+
 // Inicia modo de edição para um perfil: pré-preenche o formulário e abre a tela
 function editarPerfil(perfil){
     const descricaoInput = document.getElementById('descricaoPerfil');
     descricaoInput.value = perfil.ds_perfil || '';
     window.perfilEditId = perfil.id_perfil;
+    document.getElementById('tituloPerfil').textContent = 'Editar Perfil';
     showScreen('telaCadastro');
 }

@@ -33,6 +33,14 @@ class PerfilRepository:
             return None
         return Perfil(id_perfil=row[0], ds_perfil=row[1])
 
+    def possui_usuarios(self, id_perfil):
+        conn = conexao.conectar()
+        cursor = conn.cursor()
+        cursor.execute("SELECT 1 FROM usuario WHERE id_perfil = ? LIMIT 1", (id_perfil,))
+        existe = cursor.fetchone() is not None
+        conn.close()
+        return existe
+
     def excluir(self, id_perfil):
         conn = conexao.conectar()
         cursor = conn.cursor()

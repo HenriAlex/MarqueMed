@@ -15,7 +15,8 @@ function init() {
     // Se houver hash na URL, tenta abrir a tela correspondente, caso contrário mostra a home
     const hash = (location.hash || '').replace('#','');
     const valid = ['bemVindo','telaLista','telaCadastro','telaUsuarios','telaUsuarioCadastro'];
-    if (hash && valid.includes(hash)) showScreen(hash);
+    if (hash === 'telaUsuarioCadastro') novoUsuario();
+    else if (hash && valid.includes(hash)) showScreen(hash);
     else showScreen('bemVindo');
     // Carrega os perfis em segundo plano para popular o card de estatística.
     if (typeof carregarPerfis === 'function') carregarPerfis();
@@ -45,9 +46,10 @@ function showScreen(screen) {
     if (screen === 'telaLista' || screen === 'lista') {
         if (typeof carregarPerfis === 'function') carregarPerfis();
     }
-    if (screen === 'telaUsuarios' || screen === 'telaUsuarioCadastro') {
+    // Ao abrir a lista de usuários, recarrega os dados.
+    // O formulário de cadastro é preparado por novoUsuario()/editarUsuario().
+    if (screen === 'telaUsuarios') {
         if (typeof carregarUsuarios === 'function') carregarUsuarios();
-        if (screen === 'telaUsuarioCadastro' && typeof popularSelectPerfis === 'function') popularSelectPerfis();
     }
 }
 

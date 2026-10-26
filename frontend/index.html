@@ -22,7 +22,6 @@
         <nav class="nav-rail" aria-label="Navegação principal">
             <div class="nav-brand" title="MarqueMed">
                 <span class="nav-logo">MM</span>
-                <img src="">
             </div>
 
             <button class="nav-item" data-screen="bemVindo" onclick="showScreen('bemVindo')" title="Início">
@@ -40,7 +39,7 @@
                 <span>Usuários</span>
             </button>
 
-            <button class="nav-item" data-screen="telaCadastro" onclick="showScreen('telaCadastro')" title="Novo Perfil">
+            <button class="nav-item" data-screen="telaCadastro" onclick="novoPerfil()" title="Novo Perfil">
                 <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
                 <span>Incluir</span>
             </button>
@@ -82,6 +81,7 @@
                             Com uma interface simples e intuitiva, o sistema permite registrar as saídas, consultar informações e acompanhar os registros de forma organizada.
                         </p>
                         <p><strong>Organize. Registre. Acompanhe.</strong></p>
+                        <p>Perfis cadastrados: <strong id="statTotal">0</strong></p>
                         <p>
                             O Maquemed transforma o controle das suas consultas em um processo mais rápido, prático e transparente.
                         </p>
@@ -90,7 +90,7 @@
 
                 <!-- Tela: Cadastro de perfil -->
                 <section class="card" id="telaCadastro" style="display:none;">
-                    <h2>Cadastrar Perfil</h2>
+                    <h2 id="tituloPerfil">Cadastrar Perfil</h2>
                     <!-- Formulário simples com label associado ao input para acessibilidade -->
                     <form id="formPerfil" onsubmit="event.preventDefault(); cadastrarPerfil(); return false;">
                         <label for="descricaoPerfil">Descrição do Perfil</label>
@@ -111,7 +111,7 @@
                     <!-- Grid de cartões de perfil, atualizado dinamicamente via JS -->
                     <div id="profilesGrid" class="profiles-grid" aria-live="polite"></div>
                     <div class="list-footer">
-                        <button class="btn" onclick="showScreen('telaCadastro')">Incluir perfil</button>
+                        <button class="btn" onclick="novoPerfil()">Incluir perfil</button>
                         <button class="btn ghost" onclick="showScreen('bemVindo')">Voltar ao início</button>
                     </div>
                 </section>
@@ -124,17 +124,17 @@
                     </div>
                     <div id="usersGrid" class="profiles-grid" aria-live="polite"></div>
                     <div class="list-footer">
-                        <button class="btn" onclick="showScreen('telaUsuarioCadastro')">Incluir usuário</button>
+                        <button class="btn" onclick="novoUsuario()">Incluir usuário</button>
                         <button class="btn ghost" onclick="showScreen('bemVindo')">Voltar ao início</button>
                     </div>
                 </section>
 
                 <!-- Tela: Cadastro de usuário -->
                 <section class="card" id="telaUsuarioCadastro" style="display:none;">
-                    <h2>Cadastrar Usuário</h2>
+                    <h2 id="tituloUsuario">Cadastrar Usuário</h2>
                     <form id="formUsuario" onsubmit="event.preventDefault(); cadastrarUsuario(); return false;">
                         <label for="inputRa">ID do paciente</label>
-                        <input type="text" id="inputRa" placeholder="Número da carterinha do convenio, ou número do sus">
+                        <input type="text" id="inputRa" placeholder="Número da carterinha do convênio, ou número do SUS">
 
                         <label for="inputNome">Nome</label>
                         <input type="text" id="inputNome" placeholder="Nome completo">
@@ -143,10 +143,10 @@
                         <select id="selectPerfil"></select>
 
                         <label for="inputEmail">E-mail</label>
-                        <input type="text" id="inputEmail" placeholder="email@exemplo.com">
+                        <input type="email" id="inputEmail" placeholder="email@exemplo.com">
 
                         <label for="inputSenha">Senha</label>
-                        <input type="text" id="inputSenha" placeholder="Senha">
+                        <input type="password" id="inputSenha" placeholder="Senha">
 
                         <div class="form-actions">
                             <button class="btn" type="submit">Cadastrar</button>
@@ -159,7 +159,7 @@
     </div>
 
     <!-- Botão flutuante (FAB) para incluir perfil rapidamente em telas pequenas -->
-    <button class="fab" onclick="showScreen('telaCadastro')" title="Novo Perfil" aria-label="Novo Perfil">+</button>
+    <button class="fab" onclick="novoPerfil()" title="Novo Perfil" aria-label="Novo Perfil">+</button>
 
     <!-- Toast container para mensagens não intrusivas -->
     <div id="toast-container" aria-live="polite" aria-atomic="true"></div>

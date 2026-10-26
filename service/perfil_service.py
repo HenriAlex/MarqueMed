@@ -48,4 +48,7 @@ class PerfilService:
         perfil = self.repository.buscar_por_id(id_perfil)
         if not perfil:
             raise ValueError("Perfil não encontrado.")
+        # Evita deixar usuários apontando para um perfil removido.
+        if self.repository.possui_usuarios(id_perfil):
+            raise ValueError("Não é possível remover: existem usuários com este perfil.")
         self.repository.excluir(id_perfil)

@@ -1,6 +1,11 @@
 # Importa o FastAPI.
 # Ele será utilizado para criar nossa aplicação.
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+
+# Importa a criação das tabelas do banco.
+from database.criar_banco import CriarBanco
 
 
 # Importa o Controller de usuários.
@@ -11,11 +16,26 @@ from controllers.usuario_controller import router as usuario_router
 from controllers.perfil_controller import router as perfil_router
 
 
+# Garante que as tabelas existam (e estejam atualizadas)
+# antes de a API receber requisições.
+CriarBanco.criar()
+
+
 # Cria a aplicação FastAPI.
 app = FastAPI(
     title="MarqueMed - API",
     description="API do sistema Saidinha",
     version="1.0.0"
+)
+
+
+# Libera o acesso do front-end (abre por arquivo ou outro endereço)
+# às rotas da API.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
